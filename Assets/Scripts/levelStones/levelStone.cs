@@ -19,9 +19,19 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
     public GameObject stone2Opponent;
     public GameObject stone3Opponent;
 
+    public GameObject errorText;
+    public TMP_Text textEnd;
+
     private void errorMessage()
     {
+        errorText.SetActive(true);
         Debug.Log(" error");
+        Invoke("errorMessageOff", 5f);
+    }
+
+    private void errorMessageOff()
+    {
+        errorText.SetActive(false);
     }
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -31,21 +41,15 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
             return;
         }
         stoneCount = data.stoneCount;
-        if (stoneCount < 4) {
+        allFreeStoneCount = data.allFreeStoneCount;
+        Debug.Log("allFreeStoneCount: " + allFreeStoneCount.Count);
+        string stoneName = name;
+        stoneName = stoneName.Substring(stoneName.Length - 2);
+
+        if (stoneCount < 3) {
             stoneCount++;
-            //PlayerPrefs.SetInt("stoneCount", stoneCount);
-            //string loadedString = PlayerPrefs.GetString("allFreeStoneCount");
-            //allFreeStoneCount = JsonUtility.FromJson<List<int>>(loadedString);
-
-            allFreeStoneCount = data.allFreeStoneCount;
-            Debug.Log("allFreeStoneCount: " + allFreeStoneCount);
-
-            string stoneName = name;
-            stoneName = stoneName.Substring(stoneName.Length - 2);
 
             allFreeStoneCount.Remove(int.Parse(stoneName));
-            //string jsonDataSting = JsonUtility.ToJson(allFreeStoneCount);
-            //PlayerPrefs.SetString("allFreeStoneCount", jsonDataSting);
 
             stoneName = "free" + stoneName;
             Debug.Log("stoneName: " +  stoneName);
@@ -70,8 +74,14 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         }
     }
 
-    public void takeButton()
-    {
+    private bool playerIsWin() {
+        if(allFreeStoneCount.Count == 0)
+            return false;
+        return true;
+    }
+
+    public void takeButton() {
+
         stone1.SetActive(false);
         stone2.SetActive(false);
         stone3.SetActive(false);
@@ -79,14 +89,16 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         stone2Opponent.SetActive(false);
         stone3Opponent.SetActive(false);
 
-        stoneCount = PlayerPrefs.GetInt("stoneCount");
+        var data = saveHelper.Load<levelStoneData>(saveKey);
+        stoneCount = data.stoneCount;
+        allFreeStoneCount = data.allFreeStoneCount;
+        isFirstStep = data.isFirstStep;
 
-        string loadedString = PlayerPrefs.GetString("allFreeStoneCount");
-        allFreeStoneCount = JsonUtility.FromJson<List<int>>(loadedString);
-
-Debug.Log(allFreeStoneCount.Count +  " allFreeStoneCount.Count");
-        string jsonDataSting = JsonUtility.ToJson(allFreeStoneCount);
-        PlayerPrefs.SetString("allFreeStoneCount", jsonDataSting);
+        Debug.Log( "TakeButton \n allFreeStoneCount.Count: " + allFreeStoneCount.Count + "is" + isFirstStep);
+        if(allFreeStoneCount.Count == 0) {
+            textEnd.text = "Вы проиграли!";
+            textEnd.color = new Color (1, 1, 1, 1);
+        }
 
         Invoke("computerStep", 2f);
         
@@ -94,12 +106,12 @@ Debug.Log(allFreeStoneCount.Count +  " allFreeStoneCount.Count");
 
     //
     private void computerStep() {
-        isFirstStep = PlayerPrefs.GetInt("isFirstStep", 1) == 1;
         if (!isFirstStep) {
            getStoneCount();
         }
         stoneCountIsVisible();
         removeStone(stoneCount);
+        
     }
 
     private void stoneCountIsVisible()
@@ -132,7 +144,7 @@ Debug.Log(allFreeStoneCount.Count +  " allFreeStoneCount.Count");
             stoneCount = UnityEngine.Random.Range(1, allFreeStoneCount.Count - four + 1);
         }
         else {
-            stoneCount = allFreeStoneCount.Count - 1 > 0 ? allFreeStoneCount.Count - 1 : 1;
+            stoneCount = allFreeStoneCount.Count != 1 ? allFreeStoneCount.Count - 1 : 1;
         }
     }
 
@@ -141,7 +153,7 @@ Debug.Log(allFreeStoneCount.Count +  " allFreeStoneCount.Count");
         int rnd = 0;
         string stoneName = "";
         for (int i = 0; i < count; i++) {
-            rnd = allFreeStoneCount[UnityEngine.Random.Range(0, allFreeStoneCount.Count - 1)];
+            rnd = allFreeStoneCount[UnityEngine.Random.Range(0, allFreeStoneCount.Count)];
             if (rnd < 10) 
                 stoneName = "free0" + rnd;
             else 
@@ -151,11 +163,18 @@ Debug.Log(allFreeStoneCount.Count +  " allFreeStoneCount.Count");
             gameObject.SetActive(false);
             allFreeStoneCount.Remove(rnd);
         }
+        if(allFreeStoneCount.Count == 0) {
+            textEnd.text = "Вы выиграли!";
+            textEnd.color = new Color (1, 1, 1, 1);
+        }
+        stoneCount = 0;
+        saveHelper.Save(saveKey, getLevelStoneData());
     }
     public levelStoneData getLevelStoneData() {
         var stoneData = new levelStoneData() {
             stoneCount = stoneCount,
-            allFreeStoneCount = allFreeStoneCount
+            allFreeStoneCount = allFreeStoneCount,
+            isFirstStep = false
         };
         return stoneData;
     } 
