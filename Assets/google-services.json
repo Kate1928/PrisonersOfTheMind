@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904471938640",
+    "project_id": "prisoners-of-the-mind",
+    "storage_bucket": "prisoners-of-the-mind.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904471938640:android:bc4d39955a3ac95f2db355",
+        "android_client_info": {
+          "package_name": "com.KateCompany.Prisonersofthemind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLSKOQYKT43Nd0HhE3wKyqVp5hUm3avTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
