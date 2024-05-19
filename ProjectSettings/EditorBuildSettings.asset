@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Level1.unity
     guid: d2a6584b600072e4f825a9919fad7507
   - enabled: 1
+    path: Assets/Scenes/BookLevel2.unity
+    guid: 5d5575e3ebbe97142ac0bce28c0fae14
+  - enabled: 1
     path: Assets/Scenes/Stones.unity
     guid: b4e3373a8f3e66146b4e97814fa26e7d
   m_configObjects: {}

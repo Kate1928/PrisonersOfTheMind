@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class levelStone : MonoBehaviour,  IPointerClickHandler
 {
@@ -166,6 +167,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         if(allFreeStoneCount.Count == 0) {
             textEnd.text = "Вы выиграли!";
             textEnd.color = new Color (1, 1, 1, 1);
+            Invoke("switchScene", 5f);
         }
         stoneCount = 0;
         saveHelper.Save(saveKey, getLevelStoneData());
@@ -178,4 +180,9 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         };
         return stoneData;
     } 
+
+    private void switchScene()
+    {
+        SceneManager.LoadScene(2);
+    }
 }

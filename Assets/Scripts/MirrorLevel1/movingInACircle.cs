@@ -15,14 +15,14 @@ public class MovingInACircle : MonoBehaviour, IPointerClickHandler
     public GameObject imageEnd;
     
     private Level1 level1 = new Level1();
+    private const string saveKey = "MIRROR_LEVEL_DATA";
 
     
-     public void OnPointerClick(PointerEventData eventData)
-    {
-        
+    public void OnPointerClick(PointerEventData eventData)
+    {  
         Debug.Log(name + " GameObgect" + eventData.position + "startPos" + startPos);
         gameObject = GameObject.Find(name);
-        gameObject.transform.localScale = new Vector2(0.4f,0.4f);
+        gameObject.transform.localScale = new Vector2(1.5f, 1.5f);
         level1.saveImagePart(gameObject);
     }
     

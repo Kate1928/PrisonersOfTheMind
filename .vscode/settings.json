@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Prisoners of the mind.sln"
+    "dotnet.defaultSolution": "Prisonersofthemind.sln"
 }

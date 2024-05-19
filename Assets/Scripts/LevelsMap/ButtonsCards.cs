@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class ButtonsClards : MonoBehaviour, IPointerClickHandler
+public class ButtonsClards : MonoBehaviour
 {
     public Sprite monster1;
     public Sprite monster2;
@@ -21,18 +21,13 @@ public class ButtonsClards : MonoBehaviour, IPointerClickHandler
                 break;
             case 2:
                 GetComponent<Image>().sprite = monster2;
-                SceneManager.LoadScene(3);
+                SceneManager.LoadScene(4);
                 break;
             case 3:
                 GetComponent<Image>().sprite = monster3;
-                SceneManager.LoadScene(3);
+                SceneManager.LoadScene(5);
                 break;
         }    
     }
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log(name + " GameObgect");
-        //monster.SetActive(true); 
-        //SceneManager.LoadScene(3);  
-    }
+   
 }
