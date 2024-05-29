@@ -20,7 +20,7 @@ public class EmailPassLogin : MonoBehaviour
     [Header("Extra")]
     public GameObject loadingScreen;
     public TextMeshProUGUI logTxt;
-    public GameObject loginUi, signupUi, SuccessUi;
+    public GameObject loginUi, signupUi, SuccessUi, startFragment;
     #endregion
 
     #region signup 
@@ -53,14 +53,16 @@ public class EmailPassLogin : MonoBehaviour
             SignupPassword.text = "";
             SignupPasswordConfirm.text = "";
 
-            if (result.User.IsEmailVerified)
+            /*if (result.User.IsEmailVerified)
             {
                 showLogMsg("Sign up Successful");
             }
             else {
                 showLogMsg("Please verify your email!!");
                 SendEmailVerification();
-            }
+            }*/
+            signupUi.SetActive(false);
+            startFragment.SetActive(true);
           
         });
     }
@@ -282,19 +284,20 @@ public class EmailPassLogin : MonoBehaviour
             AuthResult result = task.Result;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);
+            showLogMsg("Log in Successful");
 
-             if (result.User.IsEmailVerified)
-             {
-                 showLogMsg("Log in Successful");
-
-                 loginUi.SetActive(false);
-                 SuccessUi.SetActive(true);
-                 SuccessUi.transform.Find("Desc").GetComponent<TextMeshProUGUI>().text = "Id: " + result.User.UserId;
-             }
+            loginUi.SetActive(false);
+            SuccessUi.SetActive(true);
+            startFragment.SetActive(true);
+            SuccessUi.transform.Find("Desc").GetComponent<TextMeshProUGUI>().text = "Id: " + result.User.UserId;
+             //if (result.User.IsEmailVerified)
+             //{
+                 
+             /*}
              else {
                  showLogMsg("Please verify email!!");
 
-             }
+             }*/
 
          });
 

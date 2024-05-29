@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class levelStone : MonoBehaviour,  IPointerClickHandler
 {
+    private const string saveKeyPlayer = "PLAYER_DATA";
+    private PlayerData data = new PlayerData();
     int stoneCount = 0;
     List<int> allFreeStoneCount = new List<int> {01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 
     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
@@ -97,7 +99,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
 
         Debug.Log( "TakeButton \n allFreeStoneCount.Count: " + allFreeStoneCount.Count + "is" + isFirstStep);
         if(allFreeStoneCount.Count == 0) {
-            textEnd.text = "Вы проиграли!";
+            textEnd.text = "Вы проиграли! Попробуйте еще раз.";
             textEnd.color = new Color (1, 1, 1, 1);
         }
 
@@ -167,6 +169,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         if(allFreeStoneCount.Count == 0) {
             textEnd.text = "Вы выиграли!";
             textEnd.color = new Color (1, 1, 1, 1);
+            saveHelper.Save(saveKeyPlayer, getPlayerData());
             Invoke("switchScene", 5f);
         }
         stoneCount = 0;
@@ -184,5 +187,12 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
     private void switchScene()
     {
         SceneManager.LoadScene(2);
+    }
+    public PlayerData getPlayerData() {
+        var playerData = new PlayerData() {
+            audioVolume = data.audioVolume,
+            level = 4
+        };
+        return playerData;
     }
 }

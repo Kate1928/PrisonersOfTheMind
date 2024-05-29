@@ -9,23 +9,49 @@ public class ButtonsClards : MonoBehaviour
     public Sprite monster1;
     public Sprite monster2;
     public Sprite monster3;
-    private const string saveKey = "LEVELS_DATA";
+    public GameObject card1, card2, card3;
+    private const string saveKey = "PLAYER_DATA";
+    private PlayerData data = new PlayerData();
+    void Start() {
+        data = saveHelper.Load<PlayerData>(saveKey);
+        switch (data.level)
+        {
+            case 2:
+                card1.GetComponent<Image>().sprite = monster1;
+                break;
+            case 3:
+                card1.GetComponent<Image>().sprite = monster1;
+                card2.GetComponent<Image>().sprite = monster2;
+                break;
+            case 4:
+                card1.GetComponent<Image>().sprite = monster1;
+                card2.GetComponent<Image>().sprite = monster2;
+                card3.GetComponent<Image>().sprite = monster3;
+                break;
+        }
+    }
 
     public void buttonsClardsClick(int cardNumber) {
-        //var data = saveHelper.Load<levelsData>(saveKey);
+        data = saveHelper.Load<PlayerData>(saveKey);
         switch (cardNumber)
         {
             case 1:
-                GetComponent<Image>().sprite = monster1;
-                SceneManager.LoadScene(3);
+                if (data.level >= cardNumber) {
+                    GetComponent<Image>().sprite = monster1;
+                    SceneManager.LoadScene(3);
+                }
                 break;
             case 2:
-                GetComponent<Image>().sprite = monster2;
-                SceneManager.LoadScene(4);
+                if (data.level >= cardNumber) {
+                    GetComponent<Image>().sprite = monster2;
+                    SceneManager.LoadScene(4);
+                }
                 break;
             case 3:
-                GetComponent<Image>().sprite = monster3;
-                SceneManager.LoadScene(5);
+                if (data.level >= cardNumber) {
+                    GetComponent<Image>().sprite = monster3;
+                    SceneManager.LoadScene(5);
+                }
                 break;
         }    
     }

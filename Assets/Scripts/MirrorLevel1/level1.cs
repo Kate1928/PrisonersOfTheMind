@@ -1,13 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System.Collections;
 
 public class Level1 : MonoBehaviour
 {
+    private const string saveKeyPlayer = "PLAYER_DATA";
+    private PlayerData data = new PlayerData();
     public struct cardInf {
         public bool isActive;
         public int number;
@@ -19,12 +19,15 @@ public class Level1 : MonoBehaviour
     private GameObject ImagePart3;
     private GameObject ImagePart4;
     private GameObject ImageAll;
-    private GameObject gameObject1;
+    private GameObject allCards;
+    private GameObject gameObject1, restartButton;
     private GameObject imageEnd;
+    private TMP_Text textError;
 
-    private int countGameObgect = 0;
-    private List<GameObject> gameObjects = new List<GameObject>();
-    public Dictionary<int, cardInf> mirrors; 
+
+
+    [SerializeField]
+    public List<int> mirrors = new List<int>(); 
 
     void Start()
     {
@@ -37,7 +40,10 @@ public class Level1 : MonoBehaviour
         GameObject ImagePart2, 
         GameObject ImagePart3, 
         GameObject ImagePart4,
-        GameObject imageEnd)
+        GameObject imageEnd,
+        GameObject allCards,
+        TMP_Text textError,
+        GameObject restartButton)
     {
         ImageAll = gameObject;
         this.ImagePart1 = ImagePart1;
@@ -45,6 +51,9 @@ public class Level1 : MonoBehaviour
         this.ImagePart3 = ImagePart3;
         this.ImagePart4 = ImagePart4;
         this.imageEnd = imageEnd;
+        this.allCards = allCards;
+        this.textError = textError;
+        this.restartButton = restartButton;
     }
 
     public GameObject getImage(int Part)
@@ -68,18 +77,11 @@ public class Level1 : MonoBehaviour
         return image;
     }
 
-    /*private bool isAllGameObgects()
-    {
-        if(PlayerPrefs.GetInt("CountGameObgect") > 11)
-            return true;
-        return false;
-    }*/
-
     private bool isWin()
     {
         bool isWin = true;
-        for (int i = 1; i < 5; i++) {
-            if (mirrors[i].number != i) {
+        for (int i = 0; i < 4; i++) {
+            if (mirrors[i] != i + 1) {
                 isWin = false;
             }
         }
@@ -91,152 +93,113 @@ public class Level1 : MonoBehaviour
     public void drawFourImage()
     {
         ImageAll.SetActive(true);
-        for (int i = 1; i < 5; i++) {
-            var part = mirrors[i].number;
-            gameObject1 = getImage(i);
-            switch(part)
+        for (int i = 0; i < 4; i++) {
+            var part = mirrors[i];
+            gameObject1 = getImage(part);
+            switch(i + 1)
             {
                 case 1:
-                    gameObject1.transform.position = new Vector3(-0.3f, 0.6f, -0.6f);
+                    gameObject1.transform.position = new Vector3(-0.37f, 0.72f, -0.6f);
+                    gameObject1.SetActive(true);
                     break;
                 case 2:
-                    gameObject1.transform.position = new Vector3(0.3f, 0.6f, -0.6f);
+                    gameObject1.transform.position = new Vector3(0.37f, 0.72f, -0.6f);
+                    gameObject1.SetActive(true);
                     break;
                 case 3:
-                    gameObject1.transform.position = new Vector3(-0.3f, -0.25f, -0.6f);
+                    gameObject1.transform.position = new Vector3(-0.37f, -0.72f, -0.6f);
+                    gameObject1.SetActive(true);
                     break;
                 case 4:
-                    gameObject1.transform.position = new Vector3(0.3f, -0.25f, -0.6f);
+                    gameObject1.transform.position = new Vector3(0.37f, -0.72f, -0.6f);
+                    gameObject1.SetActive(true);
                     break;
             }
         }
-        mirrors.Clear();
-        /*String Part = PlayerPrefs.GetString("Part1");
-        UnityEngine.Debug.Log("gameObject: " + Part);
-        gameObject1 = getImage(Part);
-        if(gameObject1 != null) {
-            gameObject1.transform.position = new Vector3(-0.3f, 0.6f, -0.6f);
-            UnityEngine.Debug.Log("gameObject: " + gameObject1.name + "position: " + gameObject1.transform.position);
-        }
-        Part = PlayerPrefs.GetString("Part2");
-        gameObject1 = getImage(Part);
-        if(gameObject1 != null) {
-            gameObject1.transform.position = new Vector3(0.3f, 0.6f, -0.6f);
-            UnityEngine.Debug.Log("gameObject: " + gameObject1.name + "position: " + gameObject1.transform.position);
-        }
         
-        Part = PlayerPrefs.GetString("Part3");
-        gameObject1 = getImage(Part);
-        if(gameObject1 != null) {
-            gameObject1.transform.position = new Vector3(-0.3f, -0.25f, -0.6f);
-            UnityEngine.Debug.Log("gameObject: " + gameObject1.name + "position: " + gameObject1.transform.position);
-        }
-        
-        Part = PlayerPrefs.GetString("Part4");
-        gameObject1 = getImage(Part);
-        if(gameObject1 != null) {
-            gameObject1.transform.position = new Vector3(0.3f, -0.25f, -0.6f);
-            UnityEngine.Debug.Log("gameObject: " + gameObject1.name + "position: " + gameObject1.transform.position);
-        }
-        UnityEngine.Debug.Log("gameObjects: " + gameObjects);*/
-
         if(isWin()) {
             UnityEngine.Debug.Log("isWin");
             imageEnd.SetActive(true);
+            mirrors.Clear();
+            saveHelper.Save(saveKey, getMirrorLevelData());
             //StartCoroutine(ExampleCoroutine());
             ImageAll.SetActive(false);
-            //PlayerPrefs.DeleteAll();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //StartCoroutine(ExampleCoroutine());
+            allCards.SetActive(false);
+            saveHelper.Save(saveKeyPlayer, getPlayerData());
+            switchScene();
         }
+        else {
+            textError.color = new Color (1, 1, 1, 1);
+            restartButton.SetActive(true);
+        }
+        
     }
 
-    /*IEnumerator ExampleCoroutine()
+    private void switchScene()
     {
-        //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(3);
-    }*/
+        SceneManager.LoadScene(2);
+    }
+
+    IEnumerator ExampleCoroutine(bool restart)
+    {
+        yield return new WaitForSeconds(5);
+        if(restart) {
+            restartLevel();
+        }
+        else {
+            switchScene();
+        }
+    }
     public void setIntPart(int part)
     {
-        
-        var inf = new cardInf{ isActive = false, number = mirrors.Count + 1};
-        mirrors.Add(part, inf);
-        /*if(!PlayerPrefs.HasKey("Part1")){
-        PlayerPrefs.SetString("Part1", part);
-        }
-        else if(!PlayerPrefs.HasKey("Part2")) {
-            PlayerPrefs.SetString("Part2", part);
-        }
-        else if(!PlayerPrefs.HasKey("Part3")) {
-            PlayerPrefs.SetString("Part3", part);
-        }
-        else if(!PlayerPrefs.HasKey("Part4")) {
-            PlayerPrefs.SetString("Part4", part);
-        }
-        UnityEngine.Debug.Log("part: " + part);*/
+        UnityEngine.Debug.Log("count: " + mirrors.Count); 
+        mirrors.Add(part);
+        UnityEngine.Debug.Log("count2: " + mirrors.Count); 
     }
 
-    public void restartLevel()
-    {
+    public void restartLevel() {
+        mirrors.Clear();
+        saveHelper.Save(saveKey, getMirrorLevelData());
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void saveImagePart(GameObject gameObject)
-    {
+    public void saveImagePart(GameObject gameObject) {
         var data = saveHelper.Load<mirrorLevelData>(saveKey);
         mirrors = data.mirrors;
-        UnityEngine.Debug.Log("Count: " + countGameObgect); 
+        if(mirrors != null)
+            UnityEngine.Debug.Log("Count: " + mirrors.Count); 
         
         if (gameObject.name == "ImageCenter") {
-            if(mirrors.Count == 4) {
+            if(mirrors != null && mirrors.Count == 4) {
                 gameObject.SetActive(false);
                 drawFourImage();
             }
             else {
-                PlayerPrefs.DeleteAll();
-                restartLevel();
+                textError.color = new Color (1, 1, 1, 1);
+                restartButton.SetActive(true);
             }
         }
         else {
             var gameObjectNumber = gameObject.name.Substring(gameObject.name.Length - 1);
-            if (mirrors != null && mirrors[int.Parse(gameObjectNumber)].isActive) {
+            if (!mirrors.Exists(x => x == int.Parse(gameObjectNumber))) {
                 setIntPart(int.Parse(gameObjectNumber));
             }
         }
-        saveHelper.Save(saveKey, getMirrorLevelData());
-        /*switch (gameObject.name)
-            {
-
-                case "Loading_free_purple1":
-                    setStringPart(1);
-                    break;
-                case "Loading_free_purple2":
-                    setStringPart(2);
-                    break;
-                case "Loading_free_purple3":
-                    setStringPart(3);
-                    break;
-                case "Loading_free_purple4":
-                    setStringPart(4);
-                    break;
-                case "Loading_free_greenCenter":
-                    if(isAllGameObgects()) {
-                        gameObject.SetActive(false);
-                        drawFourImage();
-                    }
-                    else {
-                        PlayerPrefs.DeleteAll();
-                        restartLevel();
-                    }
-                    break;
-            } 
-            //Debug.Log(gameObjects.Count);*/ 
+        saveHelper.Save(saveKey, getMirrorLevelData()); 
     }
-
     public mirrorLevelData getMirrorLevelData() {
         var mirrorData = new mirrorLevelData() {
             mirrors = mirrors
         };
         return mirrorData;
-    } 
+    }
+
+    public PlayerData getPlayerData() {
+        var playerData = new PlayerData() {
+            audioVolume = data.audioVolume,
+            level = data.level < 2 ? 2 : data.level,
+        };
+        return playerData;
+    }
 
 }

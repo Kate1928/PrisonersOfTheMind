@@ -1,0 +1,8 @@
+Executable : D:\unityHub\2023.2.14f1\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\cmake\3.22.1\bin\ninja.exe
+arguments : 
+-C
+D:\unityHub\Prisonersofthemind\.utmp\RelWithDebInfo\4236356v\x86
+game
+swappywrapper
+jvmArgs : 
+

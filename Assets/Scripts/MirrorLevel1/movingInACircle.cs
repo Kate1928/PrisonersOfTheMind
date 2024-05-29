@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +13,8 @@ public class MovingInACircle : MonoBehaviour, IPointerClickHandler
     public GameObject ImagePart3;
     public GameObject ImagePart4;
     public GameObject imageEnd;
+    public GameObject allCards, restartButton;
+    public TMP_Text textError;
     
     private Level1 level1 = new Level1();
     private const string saveKey = "MIRROR_LEVEL_DATA";
@@ -27,7 +29,7 @@ public class MovingInACircle : MonoBehaviour, IPointerClickHandler
     }
     
     private void Start() {
-        level1.initImage(ImageAll, ImagePart1, ImagePart2, ImagePart3, ImagePart4, imageEnd);
+        level1.initImage(ImageAll, ImagePart1, ImagePart2, ImagePart3, ImagePart4, imageEnd, allCards, textError, restartButton);
     }
 
 

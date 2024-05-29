@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class bookLevel : MonoBehaviour
 {
+    private const string saveKeyPlayer = "PLAYER_DATA";
+    private PlayerData data = new PlayerData();
     public GameObject informationText;
     public TMP_InputField answer;
     public TMP_Text textEnd;
@@ -28,6 +28,7 @@ public class bookLevel : MonoBehaviour
         if (rightAnswer.Equals(answer.text.ToLower())) {
             textEnd.text = "Вы выиграли!";
             textEnd.color = new Color (1, 1, 1, 1);
+            saveHelper.Save(saveKeyPlayer, getPlayerData());
             Invoke("switchScene", 5f);
         }
         else {
@@ -67,6 +68,14 @@ public class bookLevel : MonoBehaviour
     private void switchScene()
     {
         SceneManager.LoadScene(2);
+    }
+
+    public PlayerData getPlayerData() {
+        var playerData = new PlayerData() {
+            audioVolume = data.audioVolume,
+            level = data.level < 3 ? 3 : data.level,
+        };
+        return playerData;
     }
 
 }

@@ -1,0 +1,11 @@
+# ninja log v5
+33	267	7387265518562609	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	64ef07604a720e03
+270	798	7387265521301029	D:/unityHub/Prisonersofthemind/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/4236356v/obj/x86_64/libswappywrapper.so	189589130af973f3
+22	1682	7387265532617222	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	f6e94341ce551405
+5	1686	7387265532617222	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	e40013ce28524ed
+17	1802	7387265533818545	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	dc52d28170146e7
+27	1978	7387265535596811	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	b68b9e48d5563243
+1	2030	7387265536147753	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	8a7e872344b80f1c
+13	2302	7387265538848145	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	fe078e5beb9dd118
+9	2414	7387265539996558	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	acaeeae1fd6d9a5e
+2414	2590	7387265541270037	D:/unityHub/Prisonersofthemind/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/4236356v/obj/x86_64/libgame.so	da00c14e0cc43ade
