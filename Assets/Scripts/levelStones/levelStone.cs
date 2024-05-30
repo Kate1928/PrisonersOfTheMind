@@ -144,7 +144,9 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
             if (four == allFreeStoneCount.Count) {
                     stoneCount = UnityEngine.Random.Range(1, 4);
             }
-            stoneCount = UnityEngine.Random.Range(1, allFreeStoneCount.Count - four + 1);
+            else {
+                stoneCount = allFreeStoneCount.Count - four;
+            }
         }
         else {
             stoneCount = allFreeStoneCount.Count != 1 ? allFreeStoneCount.Count - 1 : 1;
