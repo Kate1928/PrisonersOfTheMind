@@ -9,7 +9,7 @@ public class TriggerEndPortals : MonoBehaviour
         saveHelper.Save(saveKeyPlayer, getPlayerData());
         SceneManager.LoadScene(2);        
     }
-    public PlayerData getPlayerData() {
+    private PlayerData getPlayerData() {
         var playerData = new PlayerData() {
             audioVolume = data.audioVolume,
             level = data.level < 1 ? 1 : data.level,

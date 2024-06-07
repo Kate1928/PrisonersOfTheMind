@@ -8,10 +8,10 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
 {
     private const string saveKeyPlayer = "PLAYER_DATA";
     private PlayerData data = new PlayerData();
-    int stoneCount = 0;
+    private int stoneCount = 0;
     List<int> allFreeStoneCount = new List<int> {01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 
     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
-    bool isFirstStep = true;
+    private bool isFirstStep = true;
     private string saveKey = "levelStoneData";
     private GameObject gameObject;
     public GameObject stone1;
@@ -21,26 +21,33 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
     public GameObject stone1Opponent;
     public GameObject stone2Opponent;
     public GameObject stone3Opponent;
-
+    public GameObject helpFragment;
     public GameObject errorText;
     public TMP_Text textEnd;
+    public TMP_Text textHelp;
 
-    private void errorMessage()
-    {
+    
+
+    private void errorMessage() {
         errorText.SetActive(true);
         Debug.Log(" error");
         Invoke("errorMessageOff", 5f);
     }
+    public void helpButton() {
+        helpFragment.SetActive(true);
+        textHelp.text = "Вспомните какая по счету была книга, о которой говорилось на прошлом уровне. Подумайте, как в игре вам может помочь это число";
+    }
+    public void helpFragmentOff() {
+        helpFragment.SetActive(false);
+    }
 
-    private void errorMessageOff()
-    {
+
+    private void errorMessageOff() {
         errorText.SetActive(false);
     }
-    public void OnPointerClick(PointerEventData eventData)
-    {
+    public void OnPointerClick(PointerEventData eventData) {
         var data = saveHelper.Load<levelStoneData> (saveKey);
-        if (name == "Button")
-        {
+        if (name == "Button") {
             return;
         }
         stoneCount = data.stoneCount;
@@ -51,8 +58,9 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
 
         if (stoneCount < 3) {
             stoneCount++;
+            int stone = int.Parse(stoneName);
 
-            allFreeStoneCount.Remove(int.Parse(stoneName));
+            allFreeStoneCount.Remove(stone);
 
             stoneName = "free" + stoneName;
             Debug.Log("stoneName: " +  stoneName);
@@ -113,12 +121,10 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
            getStoneCount();
         }
         stoneCountIsVisible();
-        removeStone(stoneCount);
-        
+        removeStone(stoneCount);  
     }
 
-    private void stoneCountIsVisible()
-    {
+    private void stoneCountIsVisible() {
         switch (stoneCount)
         {
             case 1:
@@ -137,8 +143,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
     }
 
     //get count stone for +- optimal strategy (not player)
-    private void getStoneCount()
-    {
+    private void getStoneCount() {
         if (allFreeStoneCount.Count > 3) {
             int four = (allFreeStoneCount.Count - 1) / 4 * 4;
             if (four == allFreeStoneCount.Count) {
@@ -153,8 +158,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         }
     }
 
-    public void removeStone(int count)
-    {
+    public void removeStone(int count) {
         int rnd = 0;
         string stoneName = "";
         for (int i = 0; i < count; i++) {
@@ -177,7 +181,7 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         stoneCount = 0;
         saveHelper.Save(saveKey, getLevelStoneData());
     }
-    public levelStoneData getLevelStoneData() {
+    private levelStoneData getLevelStoneData() {
         var stoneData = new levelStoneData() {
             stoneCount = stoneCount,
             allFreeStoneCount = allFreeStoneCount,
@@ -186,11 +190,10 @@ public class levelStone : MonoBehaviour,  IPointerClickHandler
         return stoneData;
     } 
 
-    private void switchScene()
-    {
+    private void switchScene() {
         SceneManager.LoadScene(2);
     }
-    public PlayerData getPlayerData() {
+    private PlayerData getPlayerData() {
         var playerData = new PlayerData() {
             audioVolume = data.audioVolume,
             level = 4

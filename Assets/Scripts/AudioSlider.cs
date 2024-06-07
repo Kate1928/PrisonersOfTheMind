@@ -12,37 +12,32 @@ public class AudioSlider : MonoBehaviour
     public Slider slider;
     private const float volumeConst = 20f;
     private PlayerData data = new PlayerData();
-    void Start()
-    {
+    void Start() {
         Load();
         ValueMusic();
     }
 
 
-    public void SliderMusic()
-    {
+    public void SliderMusic() {
         volume = slider.value;
         Save();
         ValueMusic();
     }
-    private void ValueMusic()
-    {
+    private void ValueMusic() {
         audioSource.volume = volume;
         slider.value = volume;
     }
 
-    private void Save()
-    {
+    private void Save() {
         saveHelper.Save(saveKey, getPlayerData());
     }
 
-    private void Load()
-    {
+    private void Load() {
         data = saveHelper.Load<PlayerData>(saveKey);
         volume = data.audioVolume;
     }
 
-    public PlayerData getPlayerData() {
+    private PlayerData getPlayerData() {
         var playerData = new PlayerData() {
             audioVolume = volume,
             level = data.level

@@ -6,8 +6,7 @@ public class DontDestroy : MonoBehaviour
 {
     public static DontDestroy instatnce;
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         if (instatnce != null) {
             Destroy(gameObject);
         }

@@ -923,7 +923,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &101665682
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1157,17 +1157,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6dfe79b32e55247840eb881e3262e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoginEmail: {fileID: 701693075}
-  loginPassword: {fileID: 1966100886}
-  SignupEmail: {fileID: 179920335}
-  SignupPassword: {fileID: 1253085855}
-  SignupPasswordConfirm: {fileID: 1007649521}
+  signInEmail: {fileID: 701693075}
+  signInPassword: {fileID: 1966100886}
+  signUpEmail: {fileID: 179920335}
+  signUpPassword: {fileID: 1253085855}
+  signUpPassword2: {fileID: 1007649521}
   loadingScreen: {fileID: 1874882631}
   logTxt: {fileID: 1454498413}
-  loginUi: {fileID: 1447233213}
-  signupUi: {fileID: 339810944}
-  SuccessUi: {fileID: 1253598375}
+  loginFragment: {fileID: 1447233213}
+  signupFragment: {fileID: 339810944}
+  SuccessFragment: {fileID: 1253598375}
   startFragment: {fileID: 263718802}
+  personIcon: {fileID: 0}
 --- !u!4 &150537567
 Transform:
   m_ObjectHideFlags: 0
@@ -3917,6 +3918,7 @@ MonoBehaviour:
   signInFragment: {fileID: 1447233213}
   signUpFragment: {fileID: 339810944}
   startFragment: {fileID: 263718802}
+  personIcon: {fileID: 0}
 --- !u!114 &713149416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8038,7 +8040,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1454498411
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8097,8 +8099,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -5,81 +5,99 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using Firebase;
 
-public class EmailPassLogin : MonoBehaviour
+public class EmailPassLogin : MonoBehaviour 
 {
     #region variables
-    [Header("Login")]
-    public TMP_InputField LoginEmail;
-    public TMP_InputField loginPassword;
+    [Header("SignIn")]
+    public TMP_InputField signInEmail;
+    public TMP_InputField signInPassword;
 
     [Header("Sign up")]
-    public TMP_InputField SignupEmail;
-    public TMP_InputField SignupPassword;
-    public TMP_InputField SignupPasswordConfirm;
+    public TMP_InputField signUpEmail;
+    public TMP_InputField signUpPassword;
+    public TMP_InputField signUpPassword2;
 
     [Header("Extra")]
     public GameObject loadingScreen;
     public TextMeshProUGUI logTxt;
-    public GameObject loginUi, signupUi, SuccessUi, startFragment;
+    public GameObject loginFragment, signupFragment, SuccessFragment, startFragment;
+    public GameObject personIcon;
     #endregion
 
     #region signup 
-    public void SignUp()
-    {
+    public void SignUp() {
         loadingScreen.SetActive(true);
 
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        string email = SignupEmail.text;
-        string password = SignupPassword.text;
+        
+        string email = signUpEmail.text;
+        string password = signUpPassword.text;
+        string password2 = signUpPassword2.text;
+        if (string.IsNullOrEmpty(email)) {
+            showLogMsg("Введите электронную почту");
+            return;
+        }
+        if (string.IsNullOrEmpty(password) && string.IsNullOrEmpty(password2)) {
+            showLogMsg("Введите пароль и повторите");
+            return;
+        }
+        if (password.Length < 8) {
+            showLogMsg("Слишком короткий пароль (минимум 8 символов)");
+            return;
+        }
+        if (password != password2) {
+            showLogMsg("Пароли должны совпадать");
+            return;
+        }
         auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task => {
-            if (task.IsCanceled)
-            {
+            if (task.IsCanceled) {
+                loadingScreen.SetActive(false);
+                showLogMsg("Ошибка!");
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
                 return;
             }
-            if (task.IsFaulted)
-            {
+
+            if (task.IsFaulted) {
+                loadingScreen.SetActive(false);
+                showLogMsg("Ошибка!");
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-            // Firebase user has been created.
+            // пользователь был создан
 
             loadingScreen.SetActive(false);
             AuthResult result = task.Result;
-            Debug.LogFormat("Firebase user created successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
+            
 
-            SignupEmail.text = "";
-            SignupPassword.text = "";
-            SignupPasswordConfirm.text = "";
+            signUpEmail.text = "";
+            signUpPassword.text = "";
+            signUpPassword2.text = "";
 
-            /*if (result.User.IsEmailVerified)
-            {
+            showLogMsg("Sign up Successful");
+
+            if (result.User.IsEmailVerified) {
                 showLogMsg("Sign up Successful");
+                signupFragment.SetActive(false);
+                startFragment.SetActive(true);
             }
             else {
                 showLogMsg("Please verify your email!!");
                 SendEmailVerification();
-            }*/
-            signupUi.SetActive(false);
-            startFragment.SetActive(true);
-          
+            }          
         });
     }
 
     public void SendEmailVerification() {
-        StartCoroutine(SendEmailForVerificationAsync());
+        StartCoroutine("SendEmailForVerificationAsync");
     }
 
     IEnumerator SendEmailForVerificationAsync() {
         FirebaseUser user = FirebaseAuth.DefaultInstance.CurrentUser;
-        if (user!=null)
-        {
+        if (user!=null) {
             var sendEmailTask = user.SendEmailVerificationAsync();
             yield return new WaitUntil(() => sendEmailTask.IsCompleted);
 
-            if (sendEmailTask.Exception != null)
-            {
+            if (sendEmailTask.Exception != null) {
                 print("Email send error");
                 FirebaseException firebaseException = sendEmailTask.Exception.GetBaseException() as FirebaseException;
                 AuthError error = (AuthError)firebaseException.ErrorCode;
@@ -259,60 +277,74 @@ public class EmailPassLogin : MonoBehaviour
 
     #endregion
 
-    #region Login
-    public void Login() {
+    #region SignIn
+    public void SignIn() {
         loadingScreen.SetActive(true);
 
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        string email = LoginEmail.text;
-        string password = loginPassword.text;
+        string email = signInEmail.text;
+        string password = signInPassword.text;
 
          Credential credential =
          EmailAuthProvider.GetCredential(email, password);
          auth.SignInAndRetrieveDataWithCredentialAsync(credential).ContinueWithOnMainThread(task => {
-            if (task.IsCanceled)
-            {
+            if (task.IsCanceled) {
                 Debug.LogError("SignInAndRetrieveDataWithCredentialAsync was canceled.");
                 return;
             }
-            if (task.IsFaulted)
-            {
+
+            if (task.IsFaulted) {
                 Debug.LogError("SignInAndRetrieveDataWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
-             loadingScreen.SetActive(false);
-            AuthResult result = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
-            showLogMsg("Log in Successful");
 
-            loginUi.SetActive(false);
-            SuccessUi.SetActive(true);
-            startFragment.SetActive(true);
-            SuccessUi.transform.Find("Desc").GetComponent<TextMeshProUGUI>().text = "Id: " + result.User.UserId;
-             //if (result.User.IsEmailVerified)
-             //{
-                 
-             /*}
-             else {
+            loadingScreen.SetActive(false);
+            AuthResult result = task.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})", result.User.DisplayName, result.User.UserId);
+            if (result.User.IsEmailVerified) {
+                showLogMsg("Log in Successful");
+
+                loginFragment.SetActive(false);
+                SuccessFragment.SetActive(true);
+                startFragment.SetActive(true);
+                personIcon.SetActive(true);            
+            }
+            else {
                  showLogMsg("Please verify email!!");
 
-             }*/
-
-         });
-
-        
-           
-      
+            }
+        });          
     }
     #endregion
 
     #region extra
-    void showLogMsg(string msg)
-    {
+  
+    void showLogMsg(string msg) {
         logTxt.text = msg;
-        logTxt.GetComponent<Animation>().Play("textFadeout");
+        Color color = logTxt.color;
+        color.a = 0f;
+        logTxt.color = color;
+        loadingScreen.SetActive(false);
+        StartCoroutine("showMessage");
     }
+
+    IEnumerator showMessage() {
+        for (float alfaChannelUp = 0.05f; alfaChannelUp <= 1; alfaChannelUp += 0.05f) {
+            Color color = logTxt.color;
+            color.a = alfaChannelUp;
+            logTxt.color = color;
+            yield return new WaitForSeconds(0.05f);
+        }
+        yield return new WaitForSeconds(5);
+        for (float alfaChannelDown = 1f; alfaChannelDown >= 0; alfaChannelDown -= 0.05f) {
+            Color color = logTxt.color;
+            color.a = alfaChannelDown;
+            logTxt.color = color;
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
+    
     #endregion
 
 }

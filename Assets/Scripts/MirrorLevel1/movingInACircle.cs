@@ -20,8 +20,7 @@ public class MovingInACircle : MonoBehaviour, IPointerClickHandler
     private const string saveKey = "MIRROR_LEVEL_DATA";
 
     
-    public void OnPointerClick(PointerEventData eventData)
-    {  
+    public void OnPointerClick(PointerEventData eventData) {  
         Debug.Log(name + " GameObgect" + eventData.position + "startPos" + startPos);
         gameObject = GameObject.Find(name);
         gameObject.transform.localScale = new Vector2(1.5f, 1.5f);
@@ -38,8 +37,7 @@ public class MovingInACircle : MonoBehaviour, IPointerClickHandler
         
     }
 
-    public void OkButton()
-    {
+    public void OkButton() {
         hintWindow.SetActive(false);
     }
 

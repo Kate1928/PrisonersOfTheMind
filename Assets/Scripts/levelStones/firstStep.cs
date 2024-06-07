@@ -18,7 +18,7 @@ public class firstStep : MonoBehaviour
         
     }
 
-    public levelStoneData getLevelStoneData() {
+    private levelStoneData getLevelStoneData() {
         var stoneData = new levelStoneData() {
             stoneCount = 0,
             allFreeStoneCount = allFreeStoneCount1,
@@ -27,8 +27,7 @@ public class firstStep : MonoBehaviour
         return stoneData;
     }
 
-    public void informationTextOff()
-    {
+    public void informationTextOff() {
         informationText.SetActive(false);
         
         stone1Opponent.SetActive(true);

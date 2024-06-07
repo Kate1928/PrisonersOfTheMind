@@ -13,10 +13,10 @@ public class bookLevel : MonoBehaviour
     public GameObject helpFragment;
     public TMP_Text textHelp;
 
-    public const string rightAnswer = "скорпион";
-    public const string help1 = "Найдите синоним слову 'быстр'";
-    public const string help2 = "3.14";
-    public const string help3 = "Вспомните местоимения";
+    private const string rightAnswer = "скорпион";
+    private const string help1 = "Найдите синоним слову 'быстр'";
+    private const string help2 = "3.14";
+    private const string help3 = "Вспомните местоимения";
 
     public void informationTextOff()
     {
@@ -70,7 +70,7 @@ public class bookLevel : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
-    public PlayerData getPlayerData() {
+    private PlayerData getPlayerData() {
         var playerData = new PlayerData() {
             audioVolume = data.audioVolume,
             level = data.level < 3 ? 3 : data.level,

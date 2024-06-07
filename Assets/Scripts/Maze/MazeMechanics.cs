@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MazeMechanics : MonoBehaviour
 {
-    const int MOVE_UP = 1;
-    const int MOVE_DOWN = -1;
-    const int MOVE_RIGHT = 2;
-    const int MOVE_LEFT = -2;
+    private const int MOVE_UP = 1;
+    private const int MOVE_DOWN = -1;
+    private const int MOVE_RIGHT = 2;
+    private const int MOVE_LEFT = -2;
     public GameObject penguin;
     public GameObject lightPlayer;
     private float direction = 0;
@@ -20,8 +20,7 @@ public class MazeMechanics : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         lightPlayer.transform.position = penguin.transform.position;
         switch (direction)
         {
@@ -39,12 +38,10 @@ public class MazeMechanics : MonoBehaviour
                 break;
         }
         
-        if(Input.touchCount > 0)
-        {
+        if(Input.touchCount > 0) {
             
             //#if !UNITY_EDITOR
-            if( Input.GetTouch(0).phase == TouchPhase.Began)
-            {
+            if( Input.GetTouch(0).phase == TouchPhase.Began) {
                 //direction = 0;
                 startPos = Input.GetTouch(0).position;
             }

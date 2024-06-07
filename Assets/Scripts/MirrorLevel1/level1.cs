@@ -56,8 +56,7 @@ public class Level1 : MonoBehaviour
         this.restartButton = restartButton;
     }
 
-    public GameObject getImage(int Part)
-    {
+    private GameObject getImage(int Part) {
         GameObject image = null;
         switch(Part)
         {
@@ -77,8 +76,7 @@ public class Level1 : MonoBehaviour
         return image;
     }
 
-    private bool isWin()
-    {
+    private bool isWin() {
         bool isWin = true;
         for (int i = 0; i < 4; i++) {
             if (mirrors[i] != i + 1) {
@@ -90,8 +88,7 @@ public class Level1 : MonoBehaviour
         return false;
     }
 
-    public void drawFourImage()
-    {
+    private void drawFourImage() {
         ImageAll.SetActive(true);
         for (int i = 0; i < 4; i++) {
             var part = mirrors[i];
@@ -135,13 +132,11 @@ public class Level1 : MonoBehaviour
         
     }
 
-    private void switchScene()
-    {
+    private void switchScene() {
         SceneManager.LoadScene(2);
     }
 
-    IEnumerator ExampleCoroutine(bool restart)
-    {
+    IEnumerator ExampleCoroutine(bool restart) {
         yield return new WaitForSeconds(5);
         if(restart) {
             restartLevel();
@@ -150,14 +145,13 @@ public class Level1 : MonoBehaviour
             switchScene();
         }
     }
-    public void setIntPart(int part)
-    {
+    private void setIntPart(int part) {
         UnityEngine.Debug.Log("count: " + mirrors.Count); 
         mirrors.Add(part);
         UnityEngine.Debug.Log("count2: " + mirrors.Count); 
     }
 
-    public void restartLevel() {
+    private void restartLevel() {
         mirrors.Clear();
         saveHelper.Save(saveKey, getMirrorLevelData());
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -187,14 +181,14 @@ public class Level1 : MonoBehaviour
         }
         saveHelper.Save(saveKey, getMirrorLevelData()); 
     }
-    public mirrorLevelData getMirrorLevelData() {
+    private mirrorLevelData getMirrorLevelData() {
         var mirrorData = new mirrorLevelData() {
             mirrors = mirrors
         };
         return mirrorData;
     }
 
-    public PlayerData getPlayerData() {
+    private PlayerData getPlayerData() {
         var playerData = new PlayerData() {
             audioVolume = data.audioVolume,
             level = data.level < 2 ? 2 : data.level,
